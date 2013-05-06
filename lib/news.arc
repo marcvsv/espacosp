@@ -629,7 +629,7 @@ function vote(node) {
       (login-page nil
                   (list (fn (u ip)
                           (ensure-news-user u)
-                          (Newslog ip u 'top-login))
+                          (newslog ip u 'top-login))
                         whence)))))
 
 (def noob (user)
