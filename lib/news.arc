@@ -7,13 +7,13 @@
 
 (declare 'atstrings t)
 
-(= this-site*    "My Forum"
-   site-url*     "http://news.yourdomain.com/"
-   parent-url*   "http://www.yourdomain.com"
-   favicon-url*  ""
+(= this-site*    "Espaço SP"
+   site-url*     "http://news.espacosp.com/"
+   parent-url*   "http://espacosp.com"
+   favicon-url*  "smile-branco.gif"
    site-desc*    "What this site is about."               ; for rss feed
-   site-color*   (color 180 180 180)
-   border-color* (color 180 180 180)
+   site-color*   (color 52 152 219)
+   border-color* (color 52 152 219)
    prefer-url*   t)
 
 
@@ -384,7 +384,7 @@
 
 ; Page Layout
 
-(= up-url* "grayarrow.gif" down-url* "graydown.gif" logo-url* "arc.png")
+(= up-url* "grayarrow.gif" down-url* "graydown.gif" logo-url* "smile-branco.gif")
 
 (defopr favicon.ico req favicon-url*)
 
@@ -480,7 +480,7 @@ a:link    { color:#000000; text-decoration:none; }
 a:visited { color:#828282; text-decoration:none; }
 
 .default { font-family:Verdana; font-size: 10pt; color:#828282; }
-.admin   { font-family:Verdana; font-size:8.5pt; color:#000000; }
+.admin   { font-family:Verdana; font-size:8.5pt; color:#222222; }
 .title   { font-family:Verdana; font-size: 10pt; color:#828282; }
 .adtitle { font-family:Verdana; font-size:  9pt; color:#828282; }
 .subtext { font-family:Verdana; font-size:  7pt; color:#828282; }
@@ -576,7 +576,7 @@ function vote(node) {
               (when (is switch 'full)
                 (tag (td style "line-height:12pt; height:10px;")
                   (spanclass pagetop
-                    (tag b (link this-site* "news"))
+                   (tag b (link this-site* "news"(color 236 240 241))) 
                     (hspace 10)
                     (toprow user label))))
              (if (is switch 'full)
@@ -593,21 +593,21 @@ function vote(node) {
       (tag (img src logo-url* width 18 height 18
                 style "border:1px #@(hexrep border-color*) solid;")))))
 
-(= toplabels* '(nil "welcome" "new" "threads" "comments" "leaders" "*"))
+(= toplabels* '(nil "bem-vindo" "novas" "minhas discussões" "comentários" "líderes" "*"))
 
-(= welcome-url* "welcome")
+(= welcome-url* "oi.html")
 
 (def toprow (user label)
   (w/bars
     (when (noob user)
-      (toplink "welcome" welcome-url* label))
-    (toplink "new" "newest" label)
+      (toplink "bem-vindo" welcome-url* label))
+    (toplink "novas" "newest" label)
     (when user
-      (toplink "threads" (threads-url user) label))
-    (toplink "comments" "newcomments" label)
-    (toplink "leaders"  "leaders"     label)
+      (toplink "minhas discussões" (threads-url user) label))
+    (toplink "comentários" "newcomments" label)
+    (toplink "líderes"  "leaders"     label)
     (hook 'toprow user label)
-    (link "submit")
+    (toplink "publique" "submit" label)
     (unless (mem label toplabels*)
       (fontcolor white (pr label)))))
 
@@ -629,7 +629,7 @@ function vote(node) {
       (login-page nil
                   (list (fn (u ip)
                           (ensure-news-user u)
-                          (newslog ip u 'top-login))
+                          (Newslog ip u 'top-login))
                         whence)))))
 
 (def noob (user)
@@ -709,7 +709,7 @@ function vote(node) {
                (nad-fields)
                (fn (name val)
                  (case name
-                   caching            (= caching* val)
+                   caching            (= caching* 0)
                    comment-kill       (todisk comment-kill* val)
                    comment-ignore     (todisk comment-ignore* val)
                    lightweights       (todisk lightweights* (memtable val))
@@ -807,7 +807,7 @@ function vote(node) {
   (tostring (underlink "reset password" "resetpw")))
 
 (newsop welcome ()
-  (pr "Welcome to " this-site* ", " user "!"))
+  (pr "Seja bem-vindo ao " this-site* ", " user "!"))
 
 
 ; Main Operators
@@ -851,7 +851,7 @@ function vote(node) {
 ; cached page.  If this were a prob, could make deletion clear caches.
 
 (newscache newestpage user 40
-  (listpage user (msec) (newstories user maxend*) "new" "New Links" "newest"))
+  (listpage user (msec) (newstories user maxend*) "novas" "New Links" "newest"))
 
 (def newstories (user n)
   (retrieve n [cansee user _] stories*))
@@ -1423,7 +1423,7 @@ function vote(node) {
 
 (def submit-page (user (o url) (o title) (o showtext) (o text "") (o msg)
                        (o req)) ; unused
-  (minipage "Submit"
+  (minipage "Publique"
     (pagemessage msg)
     (urform user req
             (process-story (get-user req)
@@ -1433,23 +1433,21 @@ function vote(node) {
                            (and showtext (md-from-form (arg req "x") t))
                            req!ip)
       (tab
-        (row "title"  (input "t" title 50))
+        (row "título"  (input "t" title 50))
         (if prefer-url*
           (do (row "url" (input "u" url 50))
               (when showtext
-                (row "" "<b>or</b>")
-                (row "text" (textarea "x" 4 50 (only.pr text)))))
-          (do (row "text" (textarea "x" 4 50 (only.pr text)))
-              (row "" "<b>or</b>")
+                (row "" "<b>ou</b>")
+                (row "texto" (textarea "x" 4 50 (only.pr text)))))
+          (do (row "texto" (textarea "x" 4 50 (only.pr text)))
+              (row "" "<b>ou</b>")
               (row "url" (input "u" url 50))))
         (row "" (submit))
         (spacerow 20)
         (row "" submit-instructions*)))))
 
 (= submit-instructions*
-   "Leave url blank to submit a question for discussion. If there is
-    no url, the text (if any) will appear at the top of the comments
-    page. If there is a url, the text will be ignored.")
+   "Deixe a url em branco para publicar alguma questão para ser discutida na comunidade. Se não houver url, o texto vai aparecer no topo dos comentários. Se houver url, o texto será ignorado.")
 
 ; For use by outside code like bookmarklet.
 ; http://news.domain.com/submitlink?u=http://foo.com&t=Foo
@@ -2168,7 +2166,7 @@ function vote(node) {
 (def threads-page (user subject)
   (if (profile subject)
     (withs (title (+ subject "'s comments")
-            label (if (is user subject) "threads" title)
+            label (if (is user subject) "minhas discussões" title)
             here  (threads-url subject))
       (longpage user (msec) nil label title here
         (awhen (keep [and (cansee user _) (~subcomment _)]
@@ -2258,7 +2256,7 @@ function vote(node) {
 (= nleaders* 20)
 
 (newscache leaderspage user 1000
-  (longpage user (msec) nil "leaders" "Leaders" "leaders"
+  (longpage user (msec) nil "líderes" "Líderes" "leaders"
     (sptab
       (let i 0
         (each u (firstn nleaders* (leading-users))
@@ -2332,7 +2330,7 @@ function vote(node) {
 
 (newscache newcomments-page user 60
   (listpage user (msec) (visible user (firstn maxend* comments*))
-            "comments" "New Comments" "newcomments" nil))
+            "comentários" "New Comments" "newcomments" nil))
 
 
 ; Doc
