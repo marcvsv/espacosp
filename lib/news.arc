@@ -8,10 +8,10 @@
 (declare 'atstrings t)
 
 (= this-site*    "Espaço SP"
-   site-url*     "http://news.espacosp.com/"
+   site-url*     "http://espacosp.com"
    parent-url*   "http://espacosp.com"
    favicon-url*  "smile-branco.gif"
-   site-desc*    "What this site is about."               ; for rss feed
+   site-desc*    "Vote nos assuntos mais quentes da cidade."               ; for rss feed
    site-color*   (color 52 152 219)
    border-color* (color 52 152 219)
    prefer-url*   t)
@@ -709,7 +709,7 @@ function vote(node) {
                (nad-fields)
                (fn (name val)
                  (case name
-                   caching            (= caching* 0)
+                   caching            (= caching* val)
                    comment-kill       (todisk comment-kill* val)
                    comment-ignore     (todisk comment-ignore* val)
                    lightweights       (todisk lightweights* (memtable val))
@@ -851,7 +851,7 @@ function vote(node) {
 ; cached page.  If this were a prob, could make deletion clear caches.
 
 (newscache newestpage user 40
-  (listpage user (msec) (newstories user maxend*) "novas" "New Links" "newest"))
+  (listpage user (msec) (newstories user maxend*) "novas" "Novos Links" "newest"))
 
 (def newstories (user n)
   (retrieve n [cansee user _] stories*))
@@ -957,7 +957,7 @@ function vote(node) {
                        (longpage user (msec) nil label title url
                          (apply f user items label title url args))))))
           rel 'nofollow)
-    (pr "More")))
+    (pr "Mais")))
 
 (def display-story (i s user whence)
   (when (or (cansee user s) (s 'kids))
@@ -1107,7 +1107,7 @@ function vote(node) {
         (and by (or (isnt by user) (isnt (sym auth) (user->cookie* user))))
          (pr "User mismatch.")
         (no user)
-         (login-page "You have to be logged in to vote."
+         (login-page "Você precisa fazer login para votar."
                      (list (fn (u ip)
                              (ensure-news-user u)
                              (newslog ip u 'vote-login)
@@ -1128,7 +1128,7 @@ function vote(node) {
 (def itemscore (i (o user))
   (tag (span id (+ "score_" i!id))
     (pr (plural (if (is i!type 'pollopt) (realscore i) i!score)
-                "point")))
+                "ponto")))
   (hook 'itemscore i user))
 
 (def byline (i user)
@@ -1163,7 +1163,7 @@ function vote(node) {
           (do (pr (plural n "comment"))
               (awhen (and show-threadavg* (admin user) (threadavg i))
                 (pr " (@(num it 1 t t))")))
-          (pr "discuss"))))))
+          (pr "discuta"))))))
 
 (def visible-family (user i)
   (+ (if (cansee user i) 1 0)
@@ -1310,9 +1310,9 @@ function vote(node) {
 
 (def text-age (a)
   (tostring
-    (if (>= a 1440) (pr (plural (trunc (/ a 1440)) "day")    " ago")
-        (>= a   60) (pr (plural (trunc (/ a 60))   "hour")   " ago")
-                    (pr (plural (trunc a)          "minute") " ago"))))
+    (if (>= a 1440) (pr (plural (trunc (/ a 1440)) "dia")    " atrás")
+        (>= a   60) (pr (plural (trunc (/ a 60))   "hora")   " atrás")
+                    (pr (plural (trunc a)          "minuto") " atrás"))))
 
 
 ; Voting
@@ -1415,7 +1415,7 @@ function vote(node) {
 
 (def submit-login-warning ((o url) (o title) (o showtext) (o text)
                            (o req)) ; unused
-  (login-page "You have to be logged in to submit."
+  (login-page "Você precisa fazer login antes de publicar."
               (fn (user ip)
                 (ensure-news-user user)
                 (newslog ip user 'submit-login)
@@ -2330,7 +2330,7 @@ function vote(node) {
 
 (newscache newcomments-page user 60
   (listpage user (msec) (visible user (firstn maxend* comments*))
-            "comentários" "New Comments" "newcomments" nil))
+            "comentários" "Novos Comentários" "newcomments" nil))
 
 
 ; Doc

@@ -169,17 +169,17 @@
           (fn ()
             (pwfields)
             (br2)
-            (tag div (link "Forgot your password?" "/forgotpw")))
+            (tag div (link "Esqueceu a senha?" "/forgotpw")))
           (acons afterward)))
 
 (def login-handler (req afterward)
   (logout-user (get-user req))
   (aif (good-login (arg req "u") (arg req "p") req!ip)
     (login it req!ip (user->cookie* it) afterward)
-    (failed-login "Bad login." afterward)))
+    (failed-login "Problema no login." afterward)))
 
 (def signup-form (afterward)
-  (prbold "Create Account")
+  (prbold "Crie uma conta")
   (br2)
   (fnform (fn (req) (signup-handler req afterward))
           (fn ()
@@ -187,7 +187,7 @@
                     p password 20 nil
                     e email 20 nil)
             (br)
-            (submit "signup"))
+            (submit "cadastre-se"))
           (acons afterward)))
 
 (def signup-handler (req afterward)
@@ -226,25 +226,25 @@
   (submit label))
 
 (defop forgotpw req
-  (prbold "What's your username?")
+  (prbold "Qual seu nome de usuário?")
   (aform (fn (req)
            (let user (arg req "u")
              (iflet email emails*.user
                (do (email-forgotpw-link user email)
-                   (pr "We've emailed you a link. Please click on it within the next few minutes to reset your password.")
+                   (pr "Nós enviamos um link para o seu email. Por favor, clique nele para redefinir a sua senha.")
                    (br2)
-                   (pr "If you don't see it, check your spam folder."))
-               (pr "You didn't provide a valid email. Please create a fresh account."))))
+                   (pr "Caso você não o veja, tente a caixa de spam."))
+               (pr "Você não forneceu um email válido. Por favor, crie uma nova conta."))))
     (input "u" "" 20)
-    (submit "I've forgotten my password. Help!")))
+    (submit "Esqueci minha senha!")))
 
 (def email-forgotpw-link (user email)
   (pipe-to (system "sendmail -t")
     (prn "To: " email)
-    (prn "Subject: reset your password")
+    (prn "Subject: Redefina a sua senha do Espaço SP")
     (prn "From: " (emails* admins*.0))
     (prn)
-    (prn "To reset your password, go here:")
+    (prn "Para redefinir sua senha, acesse:")
     (prn site-url* (flink (fn ignore
                             (forgotpw-reset-page user))))))
 
@@ -253,11 +253,11 @@
   (aform (fn (req)
            (let newpw (arg req "p")
              (if (len< newpw 4)
-               (forgotpw-reset-page user "Passwords should be at least 4 characters. Please choose another.")
+               (forgotpw-reset-page user "As senhas devem ter pelo menor 4 caracteres. Por favor, escolha outra.")
                (do (set-pw user newpw)
-                   (prn "Password changed.")
-                   (link "Try logging in now." "/")))))
-    (single-input "New password: " 'p 20 "update" t)))
+                   (prn "Senha trocada.")
+                   (link "Tente loggar agora." "/")))))
+    (single-input "Nova senha: " 'p 20 "update" t)))
 
 (= good-logins* (queue) bad-logins* (queue))
 
