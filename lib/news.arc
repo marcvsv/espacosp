@@ -398,6 +398,7 @@
        (prn "<link rel=\"shortcut icon\" href=\"" favicon-url* "\">")
        (prn "<meta name=\"viewport\" content=\"width=device-width\">")
        (tag script (pr votejs*))
+       (tag script (pr analytics*))
        (tag title (pr ,title)))
      (tag body
        (center
@@ -557,6 +558,17 @@ function vote(node) {
   return false; // cancel browser nav
 } ")
 
+(= analytics* "
+var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4058485-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+")
 
 ; Page top
 
@@ -1118,7 +1130,7 @@ function vote(node) {
         (canvote user i dir)
          (do (vote-for by i dir)
              (logvote ip by i))
-         (pr "Can't make that vote."))))
+         (pr "Não foi possível fazer esse voto."))))
 
 (def itemline (i user)
   (when (cansee user i)
@@ -1132,7 +1144,7 @@ function vote(node) {
   (hook 'itemscore i user))
 
 (def byline (i user)
-  (pr " by @(tostring (userlink user i!by)) @(text-age:item-age i) "))
+  (pr " por @(tostring (userlink user i!by)) @(text-age:item-age i) "))
 
 (def user-url (user) (+ "user?id=" user))
 
@@ -1160,7 +1172,7 @@ function vote(node) {
     (tag (a href (item-url i!id))
       (let n (- (visible-family user i) 1)
         (if (> n 0)
-          (do (pr (plural n "comment"))
+          (do (pr (plural n "comentário"))
               (awhen (and show-threadavg* (admin user) (threadavg i))
                 (pr " (@(num it 1 t t))")))
           (pr "discuta"))))))
