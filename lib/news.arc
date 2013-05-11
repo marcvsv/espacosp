@@ -560,7 +560,7 @@ function vote(node) {
 
 (= analytics* "
 var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-30551235-9']);
+  _gaq.push(['_setAccount', 'UA-4058485-9']);
   _gaq.push(['_trackPageview']);
 
   (function() {
