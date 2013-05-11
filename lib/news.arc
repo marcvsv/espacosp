@@ -384,7 +384,7 @@
 
 ; Page Layout
 
-(= up-url* "grayarrow.gif" down-url* "graydown.gif" logo-url* "smile-branco.gif")
+(= up-url* "grayarrow2.gif" down-url* "graydown.gif" logo-url* "smile-branco.gif")
 
 (defopr favicon.ico req favicon-url*)
 
@@ -1028,7 +1028,7 @@ var _gaq = _gaq || [];
                      (or (live s) (author user s) (editor user))
                       url)
             rel  (unless (or toself (> (realscore s) follow-threshold*))
-                   'nofollow))
+                   'nofollow) target "_blank")
       (pr s!title))))
 
 (def pdflink (url)
