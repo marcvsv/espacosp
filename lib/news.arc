@@ -384,7 +384,7 @@
 
 ; Page Layout
 
-(= up-url* "grayarrow.gif" down-url* "graydown.gif" logo-url* "smile-branco.gif")
+(= up-url* "grayarrow2.gif" down-url* "graydown.gif" logo-url* "smile-branco.gif")
 
 (defopr favicon.ico req favicon-url*)
 
@@ -1028,7 +1028,7 @@ var _gaq = _gaq || [];
                      (or (live s) (author user s) (editor user))
                       url)
             rel  (unless (or toself (> (realscore s) follow-threshold*))
-                   'nofollow))
+                   'nofollow) target "_blank")
       (pr s!title))))
 
 (def pdflink (url)
@@ -1963,7 +1963,7 @@ var _gaq = _gaq || [];
                 (addcomment-page parent u whence text))))
 
 (def addcomment-page (parent user whence (o text) (o msg))
-  (minipage "Add Comment"
+  (minipage "Comente"
     (pagemessage msg)
     (tab
       (let here (flink [addcomment-page parent (get-user _) whence text msg])
@@ -1986,7 +1986,7 @@ var _gaq = _gaq || [];
       (br2)
       (spanclass subtext (pr noob-comment-msg*)))
     (br2)
-    (submit (if (acomment parent) "reply" "add comment"))))
+    (submit (if (acomment parent) "reply" "comente"))))
 
 (= comment-threshold* -20)
 
