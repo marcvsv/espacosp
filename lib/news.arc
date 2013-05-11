@@ -1963,7 +1963,7 @@ var _gaq = _gaq || [];
                 (addcomment-page parent u whence text))))
 
 (def addcomment-page (parent user whence (o text) (o msg))
-  (minipage "Add Comment"
+  (minipage "Comente"
     (pagemessage msg)
     (tab
       (let here (flink [addcomment-page parent (get-user _) whence text msg])
@@ -1986,7 +1986,7 @@ var _gaq = _gaq || [];
       (br2)
       (spanclass subtext (pr noob-comment-msg*)))
     (br2)
-    (submit (if (acomment parent) "reply" "add comment"))))
+    (submit (if (acomment parent) "reply" "comente"))))
 
 (= comment-threshold* -20)
 
