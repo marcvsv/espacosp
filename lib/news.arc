@@ -611,9 +611,16 @@ var _gaq = _gaq || [];
 
 (def toprow (user label)
   (w/bars
-    (when (noob user)
-      (toplink "bem-vindo" welcome-url* label))
-    (toplink "novas" "newest" label)
+    ;(when (noob user)
+     ; (toplink "bem-vindo" welcome-url* label))
+ (toplink "o que é este site?" welcome-url* label)   
+ (toplink "novas" "newest" label)
+   ; (if user
+    ;  (rlinkf "bem-vindo!"
+     ; (when-umatch/r user req  
+      ; (logout-user user)
+       ;       whence))
+    ;  (toplink "o que é este site?" welcome-url* label))
     (when user
       (toplink "minhas discussões" (threads-url user) label))
     (toplink "comentários" "newcomments" label)
