@@ -612,10 +612,10 @@ var _gaq = _gaq || [];
 (def toprow (user label)
   (w/bars
     (when (noob user)
-     (toplink "bem-vindo" welcome-url* label))
- (if (no user)
-    (toplink "o que é este site?" welcome-url* label))   
- (toplink "novas" "newest" label)
+      (toplink "bem-vindo" welcome-url* label))
+    (if (no user)
+      (toplink "o que é este site?" welcome-url* label))   
+    (toplink "novas" "newest" label)
     (when user
       (toplink "minhas discussões" (threads-url user) label))
     (toplink "comentários" "newcomments" label)
